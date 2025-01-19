@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    background-color: #E9EFEC;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+/* login */
+.background-login{
+    background-image: url(../img/alun\ alun\ bg.jpg);
+    background-size: cover;
+}
+/* navbar */
+.navbar{
+    position: fixed;
+    background-color: #16423C;
+    width: 300px;
+    height: 100%;
+    box-shadow:  black;
+    transform: translateX(-200px); /* Geser ke kiri sebesar 200px */
+    transition: transform 0.3s ease;
+}
+.navbar:hover {
+    transform: translateX(0); /* Kembali ke posisi asli */
+}
+.logo-instansi{
+    width: 280px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+.navbar-container{
+    list-style: none;
+    margin-top: 50px;
+}
+/* Hilangkan logo dan menu ketika tidak di-hover */
+.logo-instansi, .menu-navbar a {
+    opacity: 0; /* Sembunyikan dengan mengubah transparansi */
+    visibility: hidden; /* Buat elemen tidak terlihat */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Tampilkan logo dan menu ketika di-hover */
+.navbar:hover .logo-instansi, 
+.navbar:hover .menu-navbar a {
+    opacity: 1; /* Tampilkan dengan mengubah transparansi */
+    visibility: visible; /* Buat elemen terlihat */
+}
+.menu-navbar{
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-family: Arial, Helvetica, sans-serif;  
+    height: 40px;
+    margin-left: 50px;
+}
+.menu-navbar a{
+    text-decoration: none;
+    color: #E9EFEC; 
+    display: flex;
+    align-items: center;
+}
+.menu-navbar img{
+    height: 40px;
+    margin-left: 30px;
+}
+.logo-navbar-preview{
+    list-style: none;
+    margin-left: 180px;
+    margin-top: -306px;
+}
+.logo-navbar-preview img{
+    height: 40px;
+    margin-top: 20px;
+    margin-left: 50px;
+}
+/* dashboard
+.header{
+    background-color: white;
+    height: 50px;
+    margin-left: 100px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.header h1 {
+    margin-left: 20px;
+}
+.akun{
+   margin-left: 63em; 
+   
+}
+.akun img{
+    display: none;
+}
+.name-user{
+    background-color: white;
+    height: 50px;
+    width: 85%;
+    margin-left: 150px;
+    display: flex;
+    align-items: center;
+    margin-top: 100px;
+}
+.name-user h2{
+    margin-left: 20px;
+}
+
+
+.box-profil-1{
+    display: flex;
+    align-items: center;
+    margin-left: 150px;
+    background-color: white;
+    margin-top: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 50px;
+    gap: 50px;
+    width: 80%;
+}
+.box-profil-2{
+    display: flex;
+    margin-left: 150px;
+    background-color: white;
+    margin-top: 50px;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 50px;
+    gap: 50px;
+    width: 80%;
+    font-family:Arial, Helvetica, sans-serif ;
+}
+.foto-profil{
+    width: 200px;
+    height: 200px;
+    border-radius: 200px;
+    overflow: hidden;
+}
+.box-profil-1 img{
+    width: 200px;
+}
+.nama-pegawai{
+    font-family:Arial, Helvetica, sans-serif ;
+}
+.nama-pegawai p{
+    font-size: 1.5rem;
+} */
+
+
