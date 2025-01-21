@@ -44,7 +44,12 @@
             <li><img src="../../img/Question_fill.png" alt=""></li>
         </ul>
     </div>
-    <a href="../../../logout.php">Logout</a>
+    <div style="margin-top: 300px;">
+        <a class="flex text-white item-center" href="../../../logout.php">
+        <p style="margin-left: 50px; font-size:1.2rem;">Logout</p>
+        <img style="height: 40px; margin-left: 120px;" src="../../img/logout.png" alt="">    
+        </a>
+    </div>
     </nav>
     
 </body>

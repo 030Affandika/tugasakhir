@@ -3,7 +3,9 @@
 <body>
 <nav class="navbar">
     <img class="logo-instansi" src="../../img/logo_dlhp.png" alt="">
-    <ul class="navbar-container">
+    <div>
+        <div>
+            <ul class="navbar-container">
     <li class="menu-navbar">
             <a href="dashboard_admin.php">
                 <p>Dashboard</p>
@@ -35,19 +37,23 @@
             </a>
         </li>
     </ul>
-    <div class="logo-none">
-    <ul class="logo-navbar-preview">
+</div>
+<div>
+<ul class="logo-navbar-preview">
             <li><img src="../../img/home_fill.png" alt=""></li>
             <li><img src="../../img/user_fill.png" alt=""></li>
             <li><img src="../../img/Desk_alt_fill.png" alt=""></li>
             <li><img src="../../img/Folder_check_fill.png" alt=""></li>
             <li><img src="../../img/Question_fill.png" alt=""></li>
         </ul>
+</div>
     </div>
-    <a class="flex mt-[100px]" href="../../../logout.php">
-    <p>Logout</p>
-    <img class="ml-[100px]" src="../../img/logout.png" alt="">    
-    </a>
+    <div style="margin-top: 300px;">
+        <a class="flex text-white item-center" href="../../../logout.php">
+        <p style="margin-left: 50px; font-size:1.2rem;">Logout</p>
+        <img style="height: 40px; margin-left: 120px;" src="../../img/logout.png" alt="">    
+        </a>
+    </div>
     </nav>
     
 </body>
