@@ -20,7 +20,7 @@ require '../../../backend/fungsi/adminpegawai.php'; // Memastikan fungsi adminpe
     <div class="p-2.5 ml-[150px] mt-12 bg-white rounded-[10px] overflow-hidden w-[80%]">
     <table class="">
         <tr class="border-b border-gray-400">
-            <th class="w-96 text-left font-medium ">Nama</th>
+            <th class="w-96 text-left font-medium">Nama</th>
             <th class="w-36 text-left font-medium">Jabatan</th>
             <th class="w-36 text-left font-medium">Pangkat</th>
             <th class="w-36 text-left font-medium">Bidang</th>
@@ -29,7 +29,12 @@ require '../../../backend/fungsi/adminpegawai.php'; // Memastikan fungsi adminpe
         </tr>
         <?php foreach ($pegawai_list as $pegawai): ?>
             <tr class="border-b border-gray-400 h-[50px]">
-                <td><a class="hover:text-blue-600" href="dokumenpegawai.php?id_pegawai=<?= $pegawai['id_pegawai']; ?>"><?= htmlspecialchars($pegawai['nama']); ?></a></td>
+            <td>
+                    <a class="hover:text-blue-600 flex items-center" href="profilpegawailengkap.php?id_pegawai=<?= $pegawai['id_pegawai']; ?>">
+                        <img class="rounded-full mr-2" src="../../../backend/fungsi/uploads/foto_profil/<?= htmlspecialchars($pegawai['foto_profil']); ?>" alt="Foto Profil" style="width: 40px; height: 40px; object-fit: cover;">
+                        <p><?= htmlspecialchars($pegawai['nama']); ?></p>
+                    </a>
+                </td>
                 <td><?= htmlspecialchars($pegawai['jabatan']); ?></td>
                 <td><?= htmlspecialchars($pegawai['pangkat']); ?></td>
                 <td><?= htmlspecialchars($pegawai['bidang']); ?></td>
