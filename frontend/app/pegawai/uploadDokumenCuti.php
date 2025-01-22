@@ -15,25 +15,23 @@ require '../../../backend/fungsi/upload.php';
     <h1>Upload Dokumen Cuti</h1>
     </div>
     <div class="bg-white rounded-[10px] p-5 ml-[150px] w-[85%] mt-[100px]">
+
+    <div>
+        <p>Silahkan unduh form pengajuan cuti disini</p>
+        <a href="">Download</a>
+    </div><br><br>
     <form action="http://localhost/SIMPEGDLHP/backend/fungsi/upload.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id_pegawai" value="<?php echo $id_pegawai; ?>">
         <input type="hidden" name="jenis_pemberkasan" value="Cuti">
 
-        <!-- Upload Akta Kelahiran -->
-        <label for="file_akta_kelahiran">Form Pengajuan Cuti</label><br>
-        <input type="file" name="file_akta_kelahiran" required><br><br>
+        <!-- Upload Form Pengajuan Cuti -->
+<label for="file_pengajuan_cuti">Form Pengajuan Cuti</label><br>
+<input type="file" name="file_pengajuan_cuti" id="file_pengajuan_cuti" required><br><br>
 
-        <!-- Upload SK -->
-        <label for="file_sk">Dokumen Pendukung</label><br>
-        <input type="file" name="file_sk" required><br><br>
+<!-- Upload Dokumen Pendukung -->
+<label for="file_dokumen_pendukung">Dokumen Pendukung</label><br>
+<input type="file" name="file_dokumen_pendukung" id="file_dokumen_pendukung" required><br><br>
 
-        <!-- Upload Kartu Keluarga -->
-        <label for="surat_pernyataan">Surat Pernyataan</label><br>
-        <input type="file" name="surat_pernyataan" required><br><br>
-
-        <!-- Upload Surat Nikah -->
-        <label for="tanda_bukti">Tanda Bukti</label><br>
-        <input type="file" name="tanda_bukti" required><br><br>
 
         <button class="bg-green-600 rounded-[20px] text-white p-2" type="submit">Upload Dokumen</button>
     </form>

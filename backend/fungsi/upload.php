@@ -77,21 +77,63 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($jenis_pemberkasan == 'Pensiun') {
         // Logika khusus untuk pensiun
-        if (isset($_FILES['file_akta_kelahiran'])) {
-            uploadFile($_FILES['file_akta_kelahiran'], $id_pegawai, "Akta_Kelahiran", $jenis_pemberkasan);
+        if (isset($_FILES['file_pengantar_usul_pensiun'])) {
+            uploadFile($_FILES['file_pengantar_usul_pensiun'], $id_pegawai, "Pengantar_Usul_Pensiun", $jenis_pemberkasan);
         }
-        if (isset($_FILES['file_sk'])) {
-            uploadFile($_FILES['file_sk'], $id_pegawai, "SK", $jenis_pemberkasan);
+        if (isset($_FILES['file_permohonan_pensiun'])) {
+            uploadFile($_FILES['file_permohonan_pensiun'], $id_pegawai, "Permohonan_Pensiun", $jenis_pemberkasan);
         }
-        if (isset($_FILES['file_kartu_bpjs'])) {
-            uploadFile($_FILES['file_kartu_bpjs'], $id_pegawai, "Kartu_BPJS", $jenis_pemberkasan);
+        if (isset($_FILES['file_pengembalian_barang'])) {
+            uploadFile($_FILES['file_pengembalian_barang'], $id_pegawai, "Pengembalian_Barang", $jenis_pemberkasan);
         }
-        if (isset($_FILES['file_surat_persetujuan_pensiun'])) {
-            uploadFile($_FILES['file_surat_persetujuan_pensiun'], $id_pegawai, "Surat_Persetujuan_Pensiun", $jenis_pemberkasan);
+        if (isset($_FILES['file_pembayaran_pensiun'])) {
+            uploadFile($_FILES['file_pembayaran_pensiun'], $id_pegawai, "Pembayaran_Pensiun", $jenis_pemberkasan);
         }
-        if (isset($_FILES['file_ijazah_terakhir'])) {
-            uploadFile($_FILES['file_ijazah_terakhir'], $id_pegawai, "Ijazah_Terakhir", $jenis_pemberkasan);
+        if (isset($_FILES['file_susunan_keluarga'])) {
+            uploadFile($_FILES['file_susunan_keluarga'], $id_pegawai, "Susunan_Keluarga", $jenis_pemberkasan);
         }
+        if (isset($_FILES['file_fotocopy_surat_nikah'])) {
+            uploadFile($_FILES['file_fotocopy_surat_nikah'], $id_pegawai, "Fotocopy_Surat_Nikah", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_riwayat_pekerjaan'])) {
+            uploadFile($_FILES['file_riwayat_pekerjaan'], $id_pegawai, "Riwayat_Pekerjaan", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_sk_pns_cpns'])) {
+            uploadFile($_FILES['file_sk_pns_cpns'], $id_pegawai, "SK_PNS_CPNS", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_sk_pangkat_terakhir'])) {
+            uploadFile($_FILES['file_sk_pangkat_terakhir'], $id_pegawai, "SK_Pangkat_Terakhir", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_sk_jabatan'])) {
+            uploadFile($_FILES['file_sk_jabatan'], $id_pegawai, "SK_Jabatan", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_gaji_berkala_terakhir'])) {
+            uploadFile($_FILES['file_gaji_berkala_terakhir'], $id_pegawai, "Gaji_Berkala_Terakhir", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_karpeg_nip'])) {
+            uploadFile($_FILES['file_karpeg_nip'], $id_pegawai, "KARPEG_Konversi_NIP", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_data_penerima_pensiun'])) {
+            uploadFile($_FILES['file_data_penerima_pensiun'], $id_pegawai, "Data_Penerima_Pensiun", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_karis_karsu'])) {
+            uploadFile($_FILES['file_karis_karsu'], $id_pegawai, "Karis_Karsu", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_skp_terakhir'])) {
+            uploadFile($_FILES['file_skp_terakhir'], $id_pegawai, "SKP_Terakhir", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_pernyataan_hukuman'])) {
+            uploadFile($_FILES['file_pernyataan_hukuman'], $id_pegawai, "Pernyataan_Hukuman", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_pas_foto'])) {
+            uploadFile($_FILES['file_pas_foto'], $id_pegawai, "Pas_Foto", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_kartu_keluarga'])) {
+            uploadFile($_FILES['file_kartu_keluarga'], $id_pegawai, "Kartu_Keluarga", $jenis_pemberkasan);
+        }
+        if (isset($_FILES['file_akta_anak'])) {
+            uploadFile($_FILES['file_akta_anak'], $id_pegawai, "Akta_Anak", $jenis_pemberkasan);
+        }        
     } elseif ($jenis_pemberkasan == 'KenaikanPangkat') {
         // Logika khusus untuk kenaikan pangkat
         if (isset($_FILES['file_akta_kelahiran'])) {
@@ -111,18 +153,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } elseif ($jenis_pemberkasan == 'Cuti') {
         // Logika khusus untuk cuti
-        if (isset($_FILES['file_akta_kelahiran'])) {
-            uploadFile($_FILES['file_akta_kelahiran'], $id_pegawai, "Akta_Kelahiran", $jenis_pemberkasan);
+        if (isset($_FILES['file_pengajuan_cuti'])) {
+            uploadFile($_FILES['file_pengajuan_cuti'], $id_pegawai, "Form_Pengajuan_Cuti", $jenis_pemberkasan);
         }
-        if (isset($_FILES['file_sk'])) {
-            uploadFile($_FILES['file_sk'], $id_pegawai, "SK", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['surat_pernyataan'])) {
-            uploadFile($_FILES['surat_pernyataan'], $id_pegawai, "Surat_Pernyataan", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['tanda_bukti'])) {
-            uploadFile($_FILES['tanda_bukti'], $id_pegawai, "Tanda_Bukti", $jenis_pemberkasan);
-        }
+        if (isset($_FILES['file_dokumen_pendukung'])) {
+            uploadFile($_FILES['file_dokumen_pendukung'], $id_pegawai, "Dokumen_Pendukung", $jenis_pemberkasan);
+        }        
     }
 }
 ?>
