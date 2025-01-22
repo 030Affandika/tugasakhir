@@ -56,47 +56,47 @@ function getDokumen()
 function addDokumen()
 {
     global $conn;
-    // Menangani data JSON yang dikirimkan
-$data = json_decode(file_get_contents('php://input'), true);
+//     // Menangani data JSON yang dikirimkan
+// $data = json_decode(file_get_contents('php://input'), true);
 
-// Cek apakah data yang diperlukan ada
-if (isset($data['id_pegawai'], $data['nama_dokumen'], $data['jenis_pemberkasan'])) {
+// // Cek apakah data yang diperlukan ada
+// if (isset($data['id_pegawai'], $data['nama_dokumen'], $data['jenis_pemberkasan'])) {
+//     // Ambil data dari request
+//     $id_pegawai = $data['id_pegawai'];
+//     $nama_dokumen = $data['nama_dokumen'];
+//     $jenis_pemberkasan = $data['jenis_pemberkasan'];
+
+//     // Query untuk menyimpan dokumen ke database
+//     $sql = "INSERT INTO dokumen (nama_dokumen, id_pegawai, jenis_pemberkasan) 
+//             VALUES ('$nama_dokumen', '$id_pegawai', '$jenis_pemberkasan')";
+
+//     if ($conn->query($sql) === TRUE) {
+//         echo json_encode(['status' => 'success', 'message' => 'Dokumen berhasil ditambahkan']);
+//     } else {
+//         echo json_encode(['status' => 'error', 'message' => 'Gagal menambahkan dokumen']);
+//     }
+// } else {
+//     echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap']);
+// }
+    $data = $_POST; // Menggunakan $_POST untuk data yang dikirim dengan form
+
     // Ambil data dari request
     $id_pegawai = $data['id_pegawai'];
-    $nama_dokumen = $data['nama_dokumen'];
+    $dokumen_name = $data['nama_dokumen'];
     $jenis_pemberkasan = $data['jenis_pemberkasan'];
 
-    // Query untuk menyimpan dokumen ke database
-    $sql = "INSERT INTO dokumen (nama_dokumen, id_pegawai, jenis_pemberkasan) 
-            VALUES ('$nama_dokumen', '$id_pegawai', '$jenis_pemberkasan')";
+    // Menghasilkan nama dokumen otomatis
+    $nama_dokumen_file = $dokumen_name . "_" . strtolower($data['nama_pegawai']) . ".pdf"; // Sesuaikan format file yang digunakan
+
+    // Query untuk menambahkan dokumen ke database
+    $sql = "INSERT INTO `dokumen`(`nama_dokumen`, `id_pegawai`, `jenis_pemberkasan`) 
+            VALUES ('$nama_dokumen_file', '$id_pegawai', '$jenis_pemberkasan')";
 
     if ($conn->query($sql) === TRUE) {
         echo json_encode(['status' => 'success', 'message' => 'Dokumen berhasil ditambahkan']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Gagal menambahkan dokumen']);
     }
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap']);
-}
-    // $data = $_POST; // Menggunakan $_POST untuk data yang dikirim dengan form
-
-    // // Ambil data dari request
-    // $id_pegawai = $data['id_pegawai'];
-    // $dokumen_name = $data['nama_dokumen'];
-    // $jenis_pemberkasan = $data['jenis_pemberkasan'];
-
-    // // Menghasilkan nama dokumen otomatis
-    // $nama_dokumen_file = $dokumen_name . "_" . strtolower($data['nama_pegawai']) . ".pdf"; // Sesuaikan format file yang digunakan
-
-    // // Query untuk menambahkan dokumen ke database
-    // $sql = "INSERT INTO `dokumen`(`nama_dokumen`, `id_pegawai`, `jenis_pemberkasan`) 
-    //         VALUES ('$nama_dokumen_file', '$id_pegawai', '$jenis_pemberkasan')";
-
-    // if ($conn->query($sql) === TRUE) {
-    //     echo json_encode(['status' => 'success', 'message' => 'Dokumen berhasil ditambahkan']);
-    // } else {
-    //     echo json_encode(['status' => 'error', 'message' => 'Gagal menambahkan dokumen']);
-    // }
 }
 
 

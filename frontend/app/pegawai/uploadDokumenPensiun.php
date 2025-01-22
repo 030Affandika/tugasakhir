@@ -13,6 +13,10 @@ require '../../../backend/fungsi/upload.php';
     <?php include_once 'navbar.php'; ?>
     <div class="bg-white h-[50px] ml-[100px] p-5 flex items-center text-[20pt] font-semibold">
     <h1>Upload Dokumen Pensiun</h1>
+    <div class="absolute right-0 mr-10 text-base">
+            <p><?php echo htmlspecialchars($_SESSION['username']); ?></p>
+            <img src="" alt="">
+        </div>
     </div>
     <div class="bg-white rounded-[10px] p-5 ml-[150px] w-[85%] mt-[100px]">
     <form action="http://localhost/SIMPEGDLHP/backend/fungsi/upload.php" method="POST" enctype="multipart/form-data">

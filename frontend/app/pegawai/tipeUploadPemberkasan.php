@@ -1,3 +1,7 @@
+<?php
+require '../../../backend/fungsi/auth.php';
+checkRole('pegawai');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +13,11 @@
 <body>
     <?php include_once 'navbar.php'; ?>
     <div class="bg-white h-[50px] ml-[100px] p-5 flex items-center text-[20pt] font-semibold">
-    <h1>Profil Pegawai</h1>
+    <h1>Pengusulan</h1>
+    <div class="absolute right-0 mr-10 text-base">
+            <p><?php echo htmlspecialchars($_SESSION['username']); ?></p>
+            <img src="" alt="">
+        </div>
     </div>
     <div class="ml-[100px] h-[600px] flex items-center justify-center gap-[50px]">
         <div class=" bg-white rounded-[10px] h-[200px] w-[300px] flex justify-center items-center">
