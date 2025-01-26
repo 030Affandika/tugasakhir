@@ -25,14 +25,20 @@ switch ($request_method) {
 function getReminder()
 {
     global $conn;
-    $sql = "SELECT * FROM reminder";
+
+    $sql = "SELECT id_reminder, pesan, tanggal_pengiriman FROM reminder ORDER BY tanggal_pengiriman DESC LIMIT 50";
     $result = $conn->query($sql);
-    $reminders = [];
-    while ($row = $result->fetch_assoc()) {
-        $reminders[] = $row;
+
+    $data = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
     }
-    echo json_encode($reminders);
+
+    return $data;
 }
+echo json_encode(getReminder());
 
 function addReminder()
 {

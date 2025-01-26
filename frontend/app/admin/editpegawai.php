@@ -1,6 +1,6 @@
 <?php
 require '../../../backend/fungsi/adminpegawai.php';
-?>;
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
