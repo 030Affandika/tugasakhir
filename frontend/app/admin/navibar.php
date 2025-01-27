@@ -31,8 +31,8 @@
             </a>
         </li>
         <li class="menu-navbar">
-            <a href="">
-                <p>Bantuan</p>
+            <a href="reminder.php">
+                <p>Log Reminder</p>
                 <!-- <img src="../../img/Question_fill.png" alt=""> -->
             </a>
         </li>

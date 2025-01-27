@@ -14,6 +14,9 @@ require '../../../backend/fungsi/detailpegawaiadmin.php';
     <div class="bg-white h-[50px] ml-[100px] p-5 flex items-center text-[20pt] font-semibold">
     <h1>Profil Pegawai</h1>
     </div>
+    <div class="ml-[150px] mt-12 rounded-[10px] p-2.5 w-[80%] bg-white">
+    <a href="editpegawai.php?id_pegawai=<?= $pegawai['id_pegawai'];?>" class="bg-green-600 text-white p-1 rounded-[5px]">Edit Pegawai</a>
+    </div>
 
     <div class="flex items-center ml-[150px] bg-white mt-[50px] rounded-[10px] overflow-hidden p-[50px] gap-[50px] w-[80%]">
         <div class="w-[200px] h-[200px] rounded-full overflow-hidden">
@@ -23,7 +26,6 @@ require '../../../backend/fungsi/detailpegawaiadmin.php';
         <p><?php echo $nama; ?></p>
         <p><?php echo $jabatan; ?></p> 
         </div>
-        <a class="ml-[100px]" href="editpegawai.php?id_pegawai=<?= $pegawai['id_pegawai']; ?>">edit</a>
     </div>
 
     <div class="flex ml-[150px] bg-white mt-[50px] rounded-[10px] overflow-hidden p-[50px] gap-[50px] w-[80%] font-sans">
