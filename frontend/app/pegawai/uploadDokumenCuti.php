@@ -1,5 +1,5 @@
 <?php
-require '../../../backend/fungsi/upload.php';
+require '../../../backend/fungsi/dokumen.php';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -9,7 +9,7 @@ require '../../../backend/fungsi/upload.php';
     <title>Upload Dokumen Cuti</title>
     <link rel="stylesheet" href="../../css/output.css">
 </head>
-<body> 
+<body>  
     <?php include_once 'navbar.php'; ?>
     <div class="bg-white h-[50px] ml-[100px] p-5 flex items-center w-full text-[20pt] font-semibold">
     <h1>Upload Dokumen Cuti</h1>

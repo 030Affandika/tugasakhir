@@ -48,14 +48,16 @@ require '../../../backend/fungsi/dokumen.php';
                         <a class=""><?php echo htmlspecialchars(str_replace('_', ' ', $dokumen['nama_dokumen'])); ?></a></li>
                     <li class="w-40">
                         <a class="bg-green-600 rounded-[10px] p-1 text-white " href="?action=download&id_pegawai=<?php echo urlencode($dokumen['id_pegawai']); ?>&file_name=<?php echo urlencode(strtolower(rtrim(pathinfo($dokumen['nama_dokumen'], PATHINFO_FILENAME), '_') . '_' . $dokumen['id_pegawai'] . '.' . pathinfo($dokumen['nama_dokumen'], PATHINFO_EXTENSION))); ?>">Download</a>
-                        <button class="bg-yellow-600 rounded-[10px] p-1 text-white" 
-                                data-file-name="<?php echo htmlspecialchars($dokumen['nama_dokumen']); ?>" 
-                                data-jenis-pemberkasan="<?php echo htmlspecialchars($jenis_pemberkasan_filter); ?>" 
-                                id="btnGantiFile">Ganti File</button>
-
-                                <!-- Form untuk mengunggah file -->
-                                <input type="file" id="fileUpload" style="display: none;" />
                     </li>
+                    <li>
+                <form method="POST" enctype="multipart/form-data">
+                    <label for="">Ganti File</label>
+                    <input type="file" name="file_update" required>
+                    <input type="hidden" name="id_dokumen" value="<?php echo htmlspecialchars($dokumen['id_dokumen']); ?>">
+                    <input type="hidden" name="dokumen_name" value="<?php echo htmlspecialchars($dokumen['nama_dokumen']); ?>">
+                    <input type="submit" class="bg-blue-600 rounded-[10px] p-1 text-white" value="Ganti">
+                </form>
+            </li>
                 </ul>
                 <?php endforeach; ?>
         <?php else : ?>
@@ -65,81 +67,6 @@ require '../../../backend/fungsi/dokumen.php';
             </div>
         <?php endif; ?>
     </div>
-<script>
-document.getElementById("btnGantiFile").addEventListener("click", function() {
-    var fileName = this.getAttribute("data-file-name");
-    var jenisPemberkasan = this.getAttribute("data-jenis-pemberkasan");
-    
-    // Menampilkan nama dokumen dan jenis pemberkasan (Opsional)
-    console.log("Nama Dokumen: " + fileName);
-    console.log("Jenis Pemberkasan: " + jenisPemberkasan);
 
-    // Membuka dialog pemilihan file
-    document.getElementById("fileUpload").click();
-});
-
-// Menangani unggahan file
-document.getElementById("fileUpload").addEventListener("change", function(event) {
-    var file = event.target.files[0];
-
-    // Pastikan ada file yang dipilih
-    if (file) {
-        // Mengirim file menggunakan AJAX atau proses lainnya
-        var formData = new FormData();
-        formData.append("file", file);
-        formData.append("file_name", file.name); // Atau bisa menggunakan data-file-name
-        formData.append("jenis_pemberkasan", document.getElementById("btnGantiFile").getAttribute("data-jenis-pemberkasan"));
-
-        // Mengirimkan file ke server untuk proses upload atau update
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "../../../backend/fungsi/dokumen.php", true);
-
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                console.log("Respons API: ", xhr.responseText);  // Log respons API
-
-                // Cek apakah respons kosong
-                if (!xhr.responseText.trim()) {
-                    alert("Tidak ada respons dari server.");
-                    return;
-                }
-
-                // Coba parsing JSON dengan try-catch
-                try {
-                    var response = JSON.parse(xhr.responseText); // Parsing respons menjadi objek JSON
-                    console.log("Parsed Response: ", response); // Debugging untuk melihat respons yang telah diparsing
-
-                    // Mengecek status dari respons JSON
-                    if (response.status === 'success') {
-                        alert(response.message);  // Tampilkan pesan sukses
-                    } else {
-                        alert(response.message);  // Tampilkan pesan error
-                    }
-                } catch (e) {
-                    alert("Terjadi kesalahan saat memparsing data JSON: " + e.message);
-                    console.error("Kesalahan parsing JSON:", e);
-                }
-            } else {
-                alert("Terjadi kesalahan saat mengunggah file.");
-                console.error("Error status: ", xhr.status); // Debugging status error
-            }
-        };
-
-        xhr.onerror = function() {
-            alert("Terjadi kesalahan jaringan saat mengirimkan file.");
-            console.error("Kesalahan jaringan:", xhr.statusText); // Debugging error jaringan
-        };
-
-        xhr.send(formData);
-    }
-});
-
-
-</script>
-
-    <!-- Bootstrap Script -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

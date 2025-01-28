@@ -5,14 +5,19 @@ require 'sesi.php'; // Memastikan sesi login
 $id_pegawai = $_SESSION['id'];
 
 // Fungsi untuk mengirim data ke endpoint API dokumen
-function saveDokumenToAPI($id_pegawai, $dokumen_name, $file_name, $jenis_pemberkasan) {
+function saveDokumenToAPI($id_pegawai, $dokumen_name, $file_name, $action, $id_dokumen = null, $jenis_pemberkasan = null) {
     $api_url = "http://localhost/SIMPEGDLHP/api/dokumen.php";
     $data = [
         'id_pegawai' => $id_pegawai,
         'nama_dokumen' => $dokumen_name,
         'file_name' => $file_name,
+        'action' => $action,
         'jenis_pemberkasan' => $jenis_pemberkasan
     ];
+
+    if ($action === 'update' && $id_dokumen) {
+        $data['id_dokumen'] = $id_dokumen;
+    }
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -23,10 +28,10 @@ function saveDokumenToAPI($id_pegawai, $dokumen_name, $file_name, $jenis_pemberk
     $response = curl_exec($ch);
     curl_close($ch);
 
-    return $response;
+    return json_decode($response, true);
 }
 
-
+ 
 // Fungsi untuk menangani upload file
 function uploadFile($file, $id_pegawai, $dokumen_name, $jenis_pemberkasan) {
     // Direktori utama
@@ -42,7 +47,13 @@ function uploadFile($file, $id_pegawai, $dokumen_name, $jenis_pemberkasan) {
     }
 
     // Format nama file
+    // Debugging
+    error_log("Upload - Dokumen Name: '" . $dokumen_name . "'");
+    error_log("Upload - ID Pegawai: '" . $id_pegawai . "'");
+
+    // Format nama file
     $file_name = strtolower(str_replace(" ", "_", $dokumen_name)) . "_" . $id_pegawai . ".pdf";
+    error_log("Upload - File Name: '" . $file_name . "'");
     $target_file = $target_dir . $file_name;
 
     // Validasi ekstensi file
@@ -142,6 +153,45 @@ function getDokumenFromAPI($id_pegawai) {
     return $data['data'];
 }
 
+function updateFile($file, $id_pegawai, $dokumen_name, $id_dokumen, $jenis_pemberkasan) {
+    $dokumen_name = pathinfo($dokumen_name, PATHINFO_FILENAME);
+    $dokumen_name = strtolower(str_replace(" ", "_", $dokumen_name));
+    $dokumen_name = rtrim($dokumen_name, '_');
+    $file_name = $dokumen_name . "_" . $id_pegawai . ".pdf";
+    
+    $base_dir = __DIR__ . "/uploads/";
+    $target_dir = $base_dir . $id_pegawai . "/";
+    $target_file = $target_dir . $file_name;
+
+    if (!in_array(strtolower(pathinfo($file['name'], PATHINFO_EXTENSION)), ['pdf'])) {
+        return ['status' => 'error', 'message' => 'Hanya file PDF yang diperbolehkan.'];
+    }
+
+    if (file_exists($target_file)) {
+        unlink($target_file);
+    }
+
+    if (move_uploaded_file($file['tmp_name'], $target_file)) {
+        // Pass the correct action and jenis_pemberkasan
+        $response = saveDokumenToAPI(
+            $id_pegawai, 
+            $dokumen_name, 
+            $file_name, 
+            'update', 
+            $id_dokumen,
+            $jenis_pemberkasan
+        );
+        
+        if ($response && isset($response['status']) && $response['status'] === 'success') {
+            return ['status' => 'success', 'message' => 'File berhasil diperbarui.'];
+        } else {
+            return ['status' => 'error', 'message' => 'Gagal memperbarui data ke database.'];
+        }
+    }
+    
+    return ['status' => 'error', 'message' => 'Gagal memindahkan file.'];
+}
+
 // Logika untuk mengunduh file
 function downloadFile($id_pegawai, $file_name) {
     // Path ke folder uploads
@@ -210,6 +260,24 @@ if (isset($_GET['file_name']) && isset($_GET['id_pegawai'])) {
 
 // Cek jika form sudah disubmit
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Check for update first
+    if (isset($_FILES['file_update']) && isset($_POST['id_dokumen']) && isset($_POST['dokumen_name'])) {
+        $id_dokumen = $_POST['id_dokumen'];
+        $dokumen_name = $_POST['dokumen_name'];
+        $jenis_pemberkasan = $_POST['jenis_pemberkasan'] ?? 'Tidak Diketahui';
+        
+        $update_response = updateFile(
+            $_FILES['file_update'], 
+            $id_pegawai, 
+            $dokumen_name, 
+            $id_dokumen,
+            $jenis_pemberkasan
+        );
+        echo json_encode($update_response);
+        exit; // Exit after update to prevent further processing
+    }
+
+    // Process new uploads
     $jenis_pemberkasan = $_POST['jenis_pemberkasan'] ?? 'Tidak Diketahui';
 
     if ($jenis_pemberkasan == 'Pensiun') {
@@ -247,19 +315,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             uploadFile($_FILES['file_ijazah_terakhir'], $id_pegawai, "Ijazah_Terakhir", $jenis_pemberkasan);
         }
     } elseif ($jenis_pemberkasan == 'Cuti') {
-        // Logika khusus untuk cuti dan mengganti file
-        if (isset($_FILES['file_akta_kelahiran'])) {
-            uploadFile($_FILES['file_akta_kelahiran'], $id_pegawai, "Akta_Kelahiran", $jenis_pemberkasan);
+        // Logika khusus untuk cuti
+        if (isset($_FILES['file_pengajuan_cuti'])) {
+            uploadFile($_FILES['file_pengajuan_cuti'], $id_pegawai, "Form_Pengajuan_Cuti", $jenis_pemberkasan);
         }
-        if (isset($_FILES['file_sk'])) {
-            uploadFile($_FILES['file_sk'], $id_pegawai, "SK", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['surat_pernyataan'])) {
-            uploadFile($_FILES['surat_pernyataan'], $id_pegawai, "Surat_Pernyataan", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['tanda_bukti'])) {
-            uploadFile($_FILES['tanda_bukti'], $id_pegawai, "Tanda_Bukti", $jenis_pemberkasan);
-        }
+        if (isset($_FILES['file_dokumen_pendukung'])) {
+            uploadFile($_FILES['file_dokumen_pendukung'], $id_pegawai, "Dokumen_Pendukung", $jenis_pemberkasan);
+        }        
     }
 }
 
