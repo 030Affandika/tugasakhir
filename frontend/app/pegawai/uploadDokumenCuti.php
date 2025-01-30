@@ -23,6 +23,7 @@ require '../../../backend/fungsi/dokumen.php';
     <form action="http://localhost/SIMPEGDLHP/backend/fungsi/dokumen.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id_pegawai" value="<?php echo $id_pegawai; ?>">
         <input type="hidden" name="jenis_pemberkasan" value="Cuti">
+        <!-- <input type="hidden" name="status_verifikasi" value="Belum Diverifikasi"> -->
 
         <!-- Upload Form Pengajuan Cuti -->
 <label for="file_pengajuan_cuti">Form Pengajuan Cuti</label><br>

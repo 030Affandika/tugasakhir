@@ -42,8 +42,19 @@ require '../../../backend/fungsi/dokumen.php';
     <?php if (!empty($dokumen_list_filtered)) : ?>
         <?php foreach ($dokumen_list_filtered as $dokumen) : ?>
             <ul class="flex w-full space-y-4">
-                <li class="w-5 content-center"><a class=""><?php echo htmlspecialchars(str_replace('_', ' ', $dokumen['status_verifikasi'])); ?></a></li>
-                <li class="w-[300px]">
+            <li class="w-5 content-center">
+            <?php 
+                $status = $dokumen['status_verifikasi'];
+                $warna = match ($status) {
+                'Diterima' => 'text-green-500',
+                'Ditolak' => 'text-red-500',
+                default => 'text-gray-500'
+            };
+             ?>
+             <a class="<?php echo $warna; ?>"><?php echo htmlspecialchars(str_replace('_', ' ', $status)); ?></a>
+            </li>
+
+                <li class="ml-[100px] w-[300px]">
                     <a class=""><?php echo htmlspecialchars(str_replace('_', ' ', $dokumen['nama_dokumen'])); ?></a></li>
                 <li class="w-40">
                 <a class="bg-green-600 rounded-[10px] p-1 text-white " 

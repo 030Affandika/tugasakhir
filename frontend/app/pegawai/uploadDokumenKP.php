@@ -1,5 +1,5 @@
 <?php
-require '../../../backend/fungsi/upload.php';
+require '../../../backend/fungsi/dokumen.php';
 ?>
 <!DOCTYPE html>
 <html lang="id">

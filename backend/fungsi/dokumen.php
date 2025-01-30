@@ -5,13 +5,14 @@ require 'sesi.php'; // Memastikan sesi login
 $id_pegawai = $_SESSION['id'];
 
 // Fungsi untuk mengirim data ke endpoint API dokumen
-function saveDokumenToAPI($id_pegawai, $dokumen_name, $file_name, $jenis_pemberkasan) {
+function saveDokumenToAPI($id_pegawai, $dokumen_name, $file_name, $jenis_pemberkasan, $status_verifikasi) {
     $api_url = "http://localhost/SIMPEGDLHP/api/dokumen.php";
     $data = [
         'id_pegawai' => $id_pegawai,
         'nama_dokumen' => $dokumen_name,
         'file_name' => $file_name,
-        'jenis_pemberkasan' => $jenis_pemberkasan
+        'jenis_pemberkasan' => $jenis_pemberkasan,
+        'status_verifikasi' => $status_verifikasi
     ];
 
     // Setup cURL untuk mengirim data POST
@@ -84,26 +85,22 @@ function saveDokumenToAPI($id_pegawai, $dokumen_name, $file_name, $jenis_pemberk
 //     echo json_encode(['status' => 'error', 'message' => 'Gagal memindahkan file ke lokasi tujuan.']);
 // }
 // }
-function uploadFile($file, $id_pegawai, $dokumen_name, $jenis_pemberkasan) {
+function uploadFile($file, $id_pegawai, $dokumen_name, $jenis_pemberkasan, $status_verifikasi) {
     // Cek apakah $jenis_pemberkasan benar-benar memiliki nilai
     if (empty($jenis_pemberkasan)) {
         error_log("ERROR: Jenis pemberkasan kosong! Tidak bisa melanjutkan proses.");
         return ['status' => 'error', 'message' => 'Jenis pemberkasan tidak boleh kosong.'];
     }
 
-    // Direktori utama
-    $base_dir = __DIR__ . "/uploads/";
-    
-    // Debugging - Cek nilai dari variabel yang digunakan
-    error_log("Jenis pemberkasan: " . $jenis_pemberkasan);
+    error_log("DEBUG: Mulai upload file");
+    error_log("Jenis Pemberkasan: " . $jenis_pemberkasan);
     error_log("ID Pegawai: " . $id_pegawai);
-
-    // Direktori target dengan format: uploads/{jenis_pemberkasan}/{id_pegawai}/
-    $target_dir = $base_dir . $jenis_pemberkasan . "/" . $id_pegawai . "/";
     
-    // Debugging - Pastikan path terbentuk dengan benar
-    error_log("Mencoba membuat folder: " . $target_dir);
-
+    $base_dir = __DIR__ . "/uploads/";
+    $target_dir = $base_dir . $id_pegawai . "/" . $jenis_pemberkasan . "/";
+    
+    error_log("Base Directory: " . $base_dir);
+    error_log("Target Directory: " . $target_dir);
     // Pastikan direktori tujuan ada
     if (!is_dir($target_dir)) {  
         if (!mkdir($target_dir, 0777, true)) {  
@@ -112,8 +109,6 @@ function uploadFile($file, $id_pegawai, $dokumen_name, $jenis_pemberkasan) {
         } else {
             error_log("Berhasil membuat folder: " . $target_dir);
         }
-    } else {
-        error_log("Folder sudah ada: " . $target_dir);
     }
 
     // Format nama file
@@ -135,7 +130,7 @@ function uploadFile($file, $id_pegawai, $dokumen_name, $jenis_pemberkasan) {
         error_log("File berhasil dipindahkan ke lokasi tujuan: " . $target_file);
 
         // Simpan data dokumen ke database melalui API
-        $response = saveDokumenToAPI($id_pegawai, $dokumen_name, $file_name, $jenis_pemberkasan);
+        $response = saveDokumenToAPI($id_pegawai, $dokumen_name, $file_name, $jenis_pemberkasan, $status_verifikasi);
         if ($response) {
             error_log("File berhasil disimpan ke database melalui API.");
             return ['status' => 'success', 'message' => 'File berhasil diunggah dan disimpan ke database.'];
@@ -203,10 +198,10 @@ function uploadFile($file, $id_pegawai, $dokumen_name, $jenis_pemberkasan) {
 function displayFiles($id_pegawai, $jenis_pemberkasan) {
     $base_dir = __DIR__ . "/uploads/";
 
-    // Tentukan direktori target berdasarkan jenis pemberkasan yang dipilih
-    $target_dir = $base_dir . $jenis_pemberkasan . "/" . $id_pegawai . "/";
+    // Tentukan direktori target berdasarkan ID pegawai dan jenis pemberkasan
+    $target_dir = $base_dir . $id_pegawai . "/" . $jenis_pemberkasan . "/";
 
-    // Cek apakah folder untuk jenis pemberkasan dan ID pegawai ada
+    // Cek apakah folder untuk ID pegawai dan jenis pemberkasan ada
     if (!is_dir($target_dir)) {
         echo "Tidak ada file untuk jenis pemberkasan '$jenis_pemberkasan' dan ID Pegawai $id_pegawai.";
         return;
@@ -218,7 +213,8 @@ function displayFiles($id_pegawai, $jenis_pemberkasan) {
 
     foreach ($rii as $file) {
         if (!$file->isDir()) {
-            $relative_path = substr($file->getPathname(), strlen($base_dir));
+            // Dapatkan path relatif yang dimulai dari folder jenis_pemberkasan
+            $relative_path = substr($file->getPathname(), strlen($target_dir));
             $files[] = $relative_path;
         }
     }
@@ -229,9 +225,8 @@ function displayFiles($id_pegawai, $jenis_pemberkasan) {
     } else {
         echo "<ul>";
         foreach ($files as $file) {
-            // Menampilkan file tanpa mengakses database atau API
             echo "<li>";
-            echo "<a href='?action=download&file_name=" . urlencode($file) . "' class='btn btn-link'>" . htmlspecialchars($file) . "</a>";
+            echo "<a href='?action=download&file_name=" . urlencode($id_pegawai . "/" . $jenis_pemberkasan . "/" . $file) . "&id_pegawai=" . urlencode($id_pegawai) . "&jenis_pemberkasan=" . urlencode($jenis_pemberkasan) . "' class='btn btn-link'>" . htmlspecialchars($file) . "</a>";
             echo "</li>";
         }
         echo "</ul>";
@@ -315,7 +310,7 @@ function updateFile($file, $id_pegawai, $dokumen_name, $id_dokumen, $jenis_pembe
     $file_name = $dokumen_name . "_" . $id_pegawai . ".pdf";
 
     $base_dir = __DIR__ . "/uploads/";
-    $target_dir = $base_dir . $jenis_pemberkasan . "/" . $id_pegawai . "/";
+    $target_dir = $base_dir . $id_pegawai . "/" . $jenis_pemberkasan . "/";
     $target_file = $target_dir . $file_name;
 
     // Pastikan direktori tujuan ada
@@ -420,25 +415,17 @@ function downloadFile($id_pegawai, $file_name, $jenis_pemberkasan) {
         die("Base directory tidak ditemukan. Pastikan folder 'uploads/' ada di lokasi yang benar.");
     }
 
-    // Bersihkan spasi ekstra dan pastikan path aman
-    $id_pegawai = trim($id_pegawai);
-    $jenis_pemberkasan = trim($jenis_pemberkasan);
-    $file_name = trim($file_name);
-
-    // Tentukan direktori target berdasarkan jenis pemberkasan dan ID pegawai
-    $target_dir = $base_dir . "/" . $jenis_pemberkasan . "/" . $id_pegawai . "/";
-    echo "Base directory: " . $base_dir . "<br>";
-    echo "Target directory: " . $target_dir . "<br>";
-
+    // Tentukan direktori target berdasarkan ID pegawai dan jenis pemberkasan
+    $target_dir = $base_dir . "/" . $id_pegawai . "/" . $jenis_pemberkasan . "/";
+    
     // Cek apakah folder tujuan ada
     if (!is_dir($target_dir)) {
-        die("Folder tidak ditemukan untuk jenis pemberkasan '$jenis_pemberkasan' dan ID Pegawai $id_pegawai.");
+        die("Folder tidak ditemukan untuk ID Pegawai $id_pegawai dan jenis pemberkasan '$jenis_pemberkasan'.");
     }
 
     // Mencari file dalam direktori yang relevan
     $file_path = realpath($target_dir . $file_name);
-    echo "File path: " . $file_path . "<br>";
-
+    
     // Cek apakah file path valid dan file ada
     if (!$file_path || !file_exists($file_path)) {
         die("File tidak ditemukan: " . htmlspecialchars($file_name));
@@ -449,26 +436,13 @@ function downloadFile($id_pegawai, $file_name, $jenis_pemberkasan) {
     header('Content-Type: application/octet-stream');
     header('Content-Disposition: attachment; filename="' . basename($file_path) . '"');
     header('Content-Length: ' . filesize($file_path));
-    header('Pragma: public');
-    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-    header("Pragma: no-cache");
-    header("Expires: 0");
-
-    echo "Last modified: " . date("F d Y H:i:s.", filemtime($file_path));
-
-    
-
-
-    // Bersihkan output buffer
-    if (ob_get_length()) {
-        ob_end_clean();
-    }
+    header('Pragma: no-cache');
+    header('Expires: 0');
 
     // Kirim file ke pengguna
     readfile($file_path);
     exit;
 }
-
 
 
 
@@ -508,48 +482,61 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $jenis_pemberkasan = $_POST['jenis_pemberkasan'] ?? 'Tidak Diketahui';
 
     if ($jenis_pemberkasan == 'Pensiun') {
-        // Logika khusus untuk pensiun dan mengganti file jika sudah ada
-        if (isset($_FILES['file_akta_kelahiran'])) {
-            uploadFile($_FILES['file_akta_kelahiran'], $id_pegawai, "Akta_Kelahiran", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['file_sk'])) {
-            uploadFile($_FILES['file_sk'], $id_pegawai, "SK", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['file_kartu_bpjs'])) {
-            uploadFile($_FILES['file_kartu_bpjs'], $id_pegawai, "Kartu_BPJS", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['file_surat_persetujuan_pensiun'])) {
-            uploadFile($_FILES['file_surat_persetujuan_pensiun'], $id_pegawai, "Surat_Persetujuan_Pensiun", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['file_ijazah_terakhir'])) {
-            uploadFile($_FILES['file_ijazah_terakhir'], $id_pegawai, "Ijazah_Terakhir", $jenis_pemberkasan);
+        $status_verifikasi = 'Belum Diverifikasi';
+        $files = [
+            'file_pengantar_usul_pensiun' => 'Pengantar_Usul_Pensiun',
+            'file_permohonan_pensiun' => 'Permohonan_Pensiun',
+            'file_pengembalian_barang' => 'Pengembalian_Barang',
+            'file_pembayaran_pensiun' => 'Pembayaran_Pensiun',
+            'file_susunan_keluarga' => 'Susunan_Keluarga',
+            'file_fotocopy_surat_nikah' => 'Fotocopy_Surat_Nikah',
+            'file_riwayat_pekerjaan' => 'Riwayat_Pekerjaan',
+            'file_sk_pns_cpns' => 'SK_PNS_CPNS',
+            'file_sk_pangkat_terakhir' => 'SK_Pangkat_Terakhir',
+            'file_sk_jabatan' => 'SK_Jabatan',
+            'file_gaji_berkala_terakhir' => 'Gaji_Berkala_Terakhir',
+            'file_karpeg_nip' => 'KARPEG_Konversi_NIP',
+            'file_data_penerima_pensiun' => 'Data_Penerima_Pensiun',
+            'file_karis_karsu' => 'Karis_Karsu',
+            'file_skp_terakhir' => 'SKP_Terakhir',
+            'file_pernyataan_hukuman' => 'Pernyataan_Hukuman',
+            'file_pas_foto' => 'Pas_Foto',
+            'file_kartu_keluarga' => 'Kartu_Keluarga',
+            'file_akta_anak' => 'Akta_Anak'
+        ];
+        foreach ($files as $key => $value) {
+            if (isset($_FILES[$key])) {
+                uploadFile($_FILES[$key], $id_pegawai, $value, $jenis_pemberkasan, $status_verifikasi);
+            }
         }
     } elseif ($jenis_pemberkasan == 'KenaikanPangkat') {
-        // Logika khusus untuk kenaikan pangkat dan mengganti file
-        if (isset($_FILES['file_akta_kelahiran'])) {
-            uploadFile($_FILES['file_akta_kelahiran'], $id_pegawai, "Akta_Kelahiran", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['file_sk'])) {
-            uploadFile($_FILES['file_sk'], $id_pegawai, "SK", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['file_kartu_keluarga'])) {
-            uploadFile($_FILES['file_kartu_keluarga'], $id_pegawai, "Kartu_Keluarga", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['file_surat_nikah'])) {
-            uploadFile($_FILES['file_surat_nikah'], $id_pegawai, "Surat_Nikah", $jenis_pemberkasan);
-        }
-        if (isset($_FILES['file_ijazah_terakhir'])) {
-            uploadFile($_FILES['file_ijazah_terakhir'], $id_pegawai, "Ijazah_Terakhir", $jenis_pemberkasan);
+        $status_verifikasi = 'Belum Diverifikasi';
+        $files = [
+            'file_sk_pangkat' => 'SK_Pangkat',
+            'file_surat_pengantar' => 'Surat_Pengantar',
+            'file_penilaian_prestasi_kerja' => 'Penilaian_Prestasi_Kerja',
+            'file_sk_jabatan' => 'SK_Jabatan',
+            'file_ijazah_terakhir' => 'Ijazah_Terakhir',
+            'file_surat_nikah' => 'Surat_Nikah',
+            'file_kartu_keluarga' => 'Kartu_Keluarga'
+        ];
+        foreach ($files as $key => $value) {
+            if (isset($_FILES[$key])) {
+                uploadFile($_FILES[$key], $id_pegawai, $value, $jenis_pemberkasan, $status_verifikasi);
+            }
         }
     } elseif ($jenis_pemberkasan == 'Cuti') {
-        // Logika khusus untuk cuti
-        if (isset($_FILES['file_pengajuan_cuti'])) {
-            uploadFile($_FILES['file_pengajuan_cuti'], $id_pegawai, "Form_Pengajuan_Cuti", $jenis_pemberkasan);
+        $status_verifikasi = 'Belum Diverifikasi';
+        $files = [
+            'file_pengajuan_cuti' => 'Form_Pengajuan_Cuti',
+            'file_dokumen_pendukung' => 'Dokumen_Pendukung'
+        ];
+        foreach ($files as $key => $value) {
+            if (isset($_FILES[$key])) {
+                uploadFile($_FILES[$key], $id_pegawai, $value, $jenis_pemberkasan, $status_verifikasi);
+            }
         }
-        if (isset($_FILES['file_dokumen_pendukung'])) {
-            uploadFile($_FILES['file_dokumen_pendukung'], $id_pegawai, "Dokumen_Pendukung", $jenis_pemberkasan);
-        }        
-    }
+    }    
 }
 
 // Menampilkan file di folder pegawai

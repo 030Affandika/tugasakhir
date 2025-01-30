@@ -84,13 +84,15 @@ function addDokumen()
     $id_pegawai = $data['id_pegawai'];
     $dokumen_name = $data['nama_dokumen'];
     $jenis_pemberkasan = $data['jenis_pemberkasan'];
+    $status_verifikasi = $data['status_verifikasi'];
 
     // Menghasilkan nama dokumen otomatis
     $nama_dokumen_file = $dokumen_name . "_" . strtolower($data['nama_pegawai']) . ".pdf"; // Sesuaikan format file yang digunakan
 
     // Query untuk menambahkan dokumen ke database
-    $sql = "INSERT INTO `dokumen`(`nama_dokumen`, `id_pegawai`, `jenis_pemberkasan`) 
-            VALUES ('$nama_dokumen_file', '$id_pegawai', '$jenis_pemberkasan')";
+    $sql = "INSERT INTO `dokumen`(`nama_dokumen`, `id_pegawai`, `jenis_pemberkasan`, `status_verifikasi`) 
+        VALUES ('$nama_dokumen_file', '$id_pegawai', '$jenis_pemberkasan', '$status_verifikasi')";
+
 
     if ($conn->query($sql) === TRUE) {
         echo json_encode(['status' => 'success', 'message' => 'Dokumen berhasil ditambahkan']);
@@ -131,7 +133,46 @@ function updateDokumen() {
     }
     
     exit();  // Pastikan tidak ada output lain setelah ini
-}
+} //code asli
+
+
+// function updateDokumen() {
+//     global $conn;
+    
+//     // Ambil data dari request
+//     $data = json_decode(file_get_contents("php://input"), true);
+
+//     // Log data yang diterima
+//     error_log('Data yang diterima: ' . print_r($data, true)); // Cek apakah data benar-benar sampai
+
+//     // Ambil data yang diperlukan
+//     $id_dokumen = $data['id_dokumen'] ?? null;
+//     $id_pegawai = $data['id_pegawai'] ?? null;
+//     $nama_dokumen = $data['nama_dokumen'] ?? null;
+//     $status_verifikasi = $data['status_verifikasi'] ?? null;
+
+//     // Validasi apakah data yang diperlukan ada
+//     if (empty($id_dokumen) || empty($status_verifikasi)) {
+//         echo json_encode(['status' => 'error', 'message' => 'ID Dokumen dan Status Verifikasi wajib diisi']);
+//         exit();
+//     }
+
+//     // Query untuk memperbarui status verifikasi
+//     $sql = "UPDATE `dokumen` SET 
+//             `status_verifikasi` = '$status_verifikasi' 
+//             WHERE `id_dokumen` = '$id_dokumen' AND `id_pegawai` = '$id_pegawai'";
+
+//     // Eksekusi query
+//     if ($conn->query($sql) === TRUE) {
+//         echo json_encode(['status' => 'success', 'message' => 'Status dokumen berhasil diperbarui']);
+//     } else {
+//         error_log('Error SQL: ' . $conn->error); // Log error SQL jika gagal
+//         echo json_encode(['status' => 'error', 'message' => 'Gagal memperbarui status dokumen']);
+//     }
+
+//     exit();  // Pastikan tidak ada output lain setelah ini
+// }
+
 // function updateDokumen() {
 //     global $conn;
 
