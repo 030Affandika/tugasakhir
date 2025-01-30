@@ -132,6 +132,56 @@ function updateDokumen() {
     
     exit();  // Pastikan tidak ada output lain setelah ini
 }
+// function updateDokumen() {
+//     global $conn;
+
+//     // Ambil data dari request
+//     $data = json_decode(file_get_contents("php://input"), true);
+
+//     // Log data yang diterima
+//     error_log('Data yang diterima: ' . print_r($data, true));
+
+//     // Validasi data yang diperlukan
+//     if (!isset($data['id_dokumen']) || !isset($data['id_pegawai']) || !isset($data['nama_dokumen']) || !isset($data['status_verifikasi'])) {
+//         echo json_encode(['status' => 'error', 'message' => 'Data yang dikirim tidak lengkap']);
+//         exit();
+//     }
+
+//     // Ambil data dari request
+//     $id_dokumen = $conn->real_escape_string($data['id_dokumen']);
+//     $id_pegawai = $conn->real_escape_string($data['id_pegawai']);
+//     $nama_dokumen = $conn->real_escape_string($data['nama_dokumen']);
+//     $status_verifikasi = $conn->real_escape_string($data['status_verifikasi']);
+
+//     // Query untuk memperbarui dokumen menggunakan prepared statement
+//     $sql = "UPDATE `dokumen` SET 
+//             `nama_dokumen` = ?, 
+//             `status_verifikasi` = ?,
+//             `id_pegawai` = ? 
+//             WHERE `id_dokumen` = ?";
+
+//     $stmt = $conn->prepare($sql);
+//     if ($stmt === false) {
+//         error_log('Error preparing statement: ' . $conn->error);
+//         echo json_encode(['status' => 'error', 'message' => 'Gagal mempersiapkan statement']);
+//         exit();
+//     }
+
+//     $stmt->bind_param("ssii", $nama_dokumen, $status_verifikasi, $id_pegawai, $id_dokumen);
+
+//     if ($stmt->execute()) {
+//         // Mengirimkan respons JSON yang valid
+//         echo json_encode(['status' => 'success', 'message' => 'Dokumen berhasil diperbarui']);
+//     } else {
+//         error_log('Error SQL: ' . $stmt->error);  // Log error SQL jika gagal
+//         // Mengirimkan respons JSON yang valid dengan pesan error
+//         echo json_encode(['status' => 'error', 'message' => 'Gagal memperbarui data ke database. Error: ' . $stmt->error]);
+//     }
+
+//     $stmt->close();
+//     exit();  // Pastikan tidak ada output lain setelah ini
+// }
+
 
 
 // Fungsi untuk menghapus dokumen berdasarkan id_dokumen
