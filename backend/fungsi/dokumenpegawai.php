@@ -196,6 +196,9 @@ function downloadFile($id_pegawai, $file_name, $jenis_pemberkasan) {
 
 
 
+
+
+
 // Mengecek apakah parameter file_name dan id_pegawai ada di URL
 // if (isset($_GET['file_name']) && isset($_GET['id_pegawai']) && isset($_GET['jenis_pemberkasan'])) {
 //     $file_name = $_GET['file_name'];
