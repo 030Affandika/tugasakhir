@@ -349,6 +349,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 'file_sk_pangkat_terakhir' => 'SK_Pangkat_Terakhir',
 'file_sk_penyesuaian_masa_kerja' => 'SK_Penyesuaian_Masa_Kerja',
 'file_sk_jabatan' => 'SK_Jabatan',
+'file_ijazah_terakhir' => 'Ijazah_Terakhir'
         ];
         foreach ($files as $key => $value) {
             if (isset($_FILES[$key])) {

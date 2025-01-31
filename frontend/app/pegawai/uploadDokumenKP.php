@@ -39,6 +39,10 @@ require '../../../backend/fungsi/dokumen.php';
 <label for="file_sk_jabatan">SK Jabatan:</label><br>
 <input type="file" name="file_sk_jabatan" required><br><br>
 
+<!-- Upload Ijazah Terakhir -->
+<label for="file_ijazah_terakhir">Ijazah Terakhir:</label><br>
+<input type="file" name="file_ijazah_terakhir" required><br><br>
+
 
         <button class="bg-green-600 rounded-[20px] text-white p-2" type="submit">Upload Dokumen</button>
     </form>

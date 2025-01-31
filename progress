@@ -1,10 +1,8 @@
 sisi pegawai
 download dokumen sudah
-edit dokumen 
+edit dokumen sudah
 menampilkan status verifikasi sudah
 
-
-dilewati dulu yang sisi pegawai mulai admin dulu
 login admin sudah
 logout sudah
 menampilkan nama pegawai untuk profil sudah
@@ -17,22 +15,14 @@ sortir dokumen berdasarkan pengusulan sudah
 menampilkan dokumen sudah
 unduh dokumen sudah
 tmt pegawai sudah
-menampilkan status verifikasi
-set status verifikasi
+menampilkan status verifikasi sudah
+set status verifikasi sudah
 
 
-sisi pegawai edit file
+sisi pegawai edit file sudah
 
-
-isi bab 4 
-implementasi 
-- prototyping (dokumentasi)
-- revisi dan saran
-- development
-testing (blackbox)
-SUS kuesioner
-
-
-persyaratan cuti
--form pengajuan cuti
--dokumen pendukung
+fitur yang kurang
+kirim hasil verifikasi
+search (nama pegawai, dokumen)
+download form cuti
+sama alert beberapa masih di url saja belum popup
