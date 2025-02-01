@@ -1,15 +1,20 @@
 <?php
-require 'sesi.php'; // Memastikan sesi login
+require 'sesi.php';
 
-// Cek role
 if ($_SESSION['role'] !== "admin") {
     die("Akses ditolak! Halaman ini hanya untuk admin.");
 }
 
-// Endpoint API untuk admin
 $api_url = "http://localhost/SIMPEGDLHP/api/pegawai.php";
 
-// Ambil data semua pegawai
+// Get search query if exists
+$search_query = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Modify API URL if search query exists
+if (!empty($search_query)) {
+    $api_url .= "?search=" . urlencode($search_query);
+}
+
 $response = file_get_contents($api_url);
 if ($response === false) {
     die("Gagal mengambil data dari API. Periksa koneksi atau URL API.");
@@ -20,8 +25,17 @@ if (json_last_error() !== JSON_ERROR_NONE) {
     die("Error decoding JSON: " . json_last_error_msg());
 }
 
-$pegawai_list = $data['data']; // Asumsikan API mengembalikan array data pegawai
+$pegawai_list = $data['data'];
 
+// If search is active, filter results
+if (!empty($search_query)) {
+    $pegawai_list = array_filter($pegawai_list, function($pegawai) use ($search_query) {
+        return stripos($pegawai['nama'], $search_query) !== false;
+    });
+}
+
+
+// fungsi tambah pegawai
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_pegawai'])) {
     $data = [
         'nama' => $_POST['nama'],

@@ -20,9 +20,12 @@ set status verifikasi sudah
 
 
 sisi pegawai edit file sudah
+search (nama pegawai, dokumen) sudah
+download form cuti sudah
 
 fitur yang kurang
-kirim hasil verifikasi
-search (nama pegawai, dokumen)
-download form cuti
+kirim hasil verifikasi (buatkan fitur untuk mengirimkan status verifikasi ke whatsapp pengguna pada code ini, dan tambahkan tombol kirim hasil verifikasi pada halaman htmlnya (file bisa dipisahb atau digabung tpi mending di pisah saja))
 sama alert beberapa masih di url saja belum popup
+
+untuk laporan/word
+ganti aktiviti diagram, upload tidak perlu ke menu bantuan karena berkas apa saja yaang perlu diup sudah tertera, untuk belah ketupatnya dipindah ke setelah menekan tombol simpan(berkas tersimpan (ya/tidak))

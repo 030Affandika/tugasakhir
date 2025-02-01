@@ -98,45 +98,85 @@ function uploadFile($file, $id_pegawai, $dokumen_name, $jenis_pemberkasan, $stat
     }
 }
 
-function displayFiles($id_pegawai, $jenis_pemberkasan) {
-    $base_dir = __DIR__ . "/uploads/";
+// function displayFiles($id_pegawai, $jenis_pemberkasan) {
+//     $base_dir = __DIR__ . "/uploads/";
 
-    // Tentukan direktori target berdasarkan jenis pemberkasan yang dipilih
+//     // Tentukan direktori target berdasarkan jenis pemberkasan yang dipilih
+//     $target_dir = $base_dir . $jenis_pemberkasan . "/" . $id_pegawai . "/";
+
+//     // Cek apakah folder untuk jenis pemberkasan dan ID pegawai ada
+//     if (!is_dir($target_dir)) {
+//         echo "Tidak ada file untuk jenis pemberkasan '$jenis_pemberkasan' dan ID Pegawai $id_pegawai.";
+//         return;
+//     }
+
+//     // Fungsi untuk memindai file secara rekursif dalam subfolder
+//     $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($target_dir));
+//     $files = [];
+
+//     foreach ($rii as $file) {
+//         if (!$file->isDir()) {
+//             // Dapatkan path relatif yang dimulai dari folder id_pegawai
+//             $relative_path = substr($file->getPathname(), strlen($target_dir));
+//             $files[] = $relative_path;
+//         }
+//     }
+
+//     // Menampilkan file
+//     if (empty($files)) {
+//         echo "Tidak ada file yang tersedia untuk jenis pemberkasan '$jenis_pemberkasan'.";
+//     } else {
+//         echo "<ul>";
+//         foreach ($files as $file) {
+//             // Ubah path pencarian download untuk sesuai dengan struktur baru
+//             echo "<li>";
+//             echo "<a href='?action=download&file_name=" . urlencode($jenis_pemberkasan . "/" . $id_pegawai . "/" . $file) . "&id_pegawai=" . urlencode($id_pegawai) . "&jenis_pemberkasan=" . urlencode($jenis_pemberkasan) . "' class='btn btn-link'>" . htmlspecialchars($file) . "</a>";
+//             echo "</li>";
+//         }
+//         echo "</ul>";
+//     }
+// }
+function displayFiles($id_pegawai, $jenis_pemberkasan, $search = '') {
+    $base_dir = __DIR__ . "/uploads/";
     $target_dir = $base_dir . $jenis_pemberkasan . "/" . $id_pegawai . "/";
 
-    // Cek apakah folder untuk jenis pemberkasan dan ID pegawai ada
     if (!is_dir($target_dir)) {
         echo "Tidak ada file untuk jenis pemberkasan '$jenis_pemberkasan' dan ID Pegawai $id_pegawai.";
         return;
     }
 
-    // Fungsi untuk memindai file secara rekursif dalam subfolder
     $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($target_dir));
     $files = [];
 
     foreach ($rii as $file) {
         if (!$file->isDir()) {
-            // Dapatkan path relatif yang dimulai dari folder id_pegawai
             $relative_path = substr($file->getPathname(), strlen($target_dir));
-            $files[] = $relative_path;
+            // Only add files that match the search term (if provided)
+            if (empty($search) || stripos($relative_path, $search) !== false) {
+                $files[] = $relative_path;
+            }
         }
     }
 
-    // Menampilkan file
     if (empty($files)) {
-        echo "Tidak ada file yang tersedia untuk jenis pemberkasan '$jenis_pemberkasan'.";
+        if (!empty($search)) {
+            echo "Tidak ada file yang cocok dengan pencarian '$search'.";
+        } else {
+            echo "Tidak ada file yang tersedia untuk jenis pemberkasan '$jenis_pemberkasan'.";
+        }
     } else {
         echo "<ul>";
         foreach ($files as $file) {
-            // Ubah path pencarian download untuk sesuai dengan struktur baru
             echo "<li>";
-            echo "<a href='?action=download&file_name=" . urlencode($jenis_pemberkasan . "/" . $id_pegawai . "/" . $file) . "&id_pegawai=" . urlencode($id_pegawai) . "&jenis_pemberkasan=" . urlencode($jenis_pemberkasan) . "' class='btn btn-link'>" . htmlspecialchars($file) . "</a>";
+            echo "<a href='?action=download&file_name=" . urlencode($jenis_pemberkasan . "/" . $id_pegawai . "/" . $file) . 
+                 "&id_pegawai=" . urlencode($id_pegawai) . 
+                 "&jenis_pemberkasan=" . urlencode($jenis_pemberkasan) . 
+                 "' class='btn btn-link'>" . htmlspecialchars($file) . "</a>";
             echo "</li>";
         }
         echo "</ul>";
     }
 }
-
 
 function getDokumenFromAPI($id_pegawai) {
     $url = "http://localhost/SIMPEGDLHP/api/dokumen.php?id_pegawai=" . $id_pegawai;
