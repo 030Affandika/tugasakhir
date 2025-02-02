@@ -15,57 +15,77 @@ if (isset($_GET['id_pegawai']) && is_numeric($_GET['id_pegawai'])) {
 
 // Function to update status verifikasi
 function updateStatusVerifikasi() {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
-        // Validate required fields
-        $required_fields = ['id_dokumen', 'id_pegawai', 'nama_dokumen', 'status_verifikasi'];
-        foreach ($required_fields as $field) {
-            if (!isset($_POST[$field]) || empty($_POST[$field])) {
-                die("Error: Field $field is required");
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['batch_update_status']) && isset($_POST['dokumen'])) {
+        $success_count = 0;
+        $error_count = 0;
+        
+        foreach ($_POST['dokumen'] as $dokumen_data) {
+            // Validate required fields
+            $required_fields = ['id_dokumen', 'id_pegawai', 'nama_dokumen', 'status_verifikasi'];
+            $valid = true;
+            foreach ($required_fields as $field) {
+                if (!isset($dokumen_data[$field]) || empty($dokumen_data[$field])) {
+                    $valid = false;
+                    break;
+                }
             }
+            
+            if (!$valid) {
+                $error_count++;
+                continue;
+            }
+
+            // Prepare data for API request
+            $data = [
+                'id_dokumen' => $dokumen_data['id_dokumen'],
+                'id_pegawai' => $dokumen_data['id_pegawai'],
+                'nama_dokumen' => $dokumen_data['nama_dokumen'],
+                'status_verifikasi' => $dokumen_data['status_verifikasi']
+            ];
+
+            // Initialize cURL session
+            $ch = curl_init('http://localhost/SIMPEGDLHP/api/dokumen.php');
+            
+            // Set cURL options
+            curl_setopt_array($ch, [
+                CURLOPT_CUSTOMREQUEST => "PUT",
+                CURLOPT_POSTFIELDS => json_encode($data),
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen(json_encode($data))
+                ]
+            ]);
+
+            // Execute cURL request
+            $response = curl_exec($ch);
+            
+            if (curl_errno($ch)) {
+                $error_count++;
+            } else {
+                $result = json_decode($response, true);
+                if ($result['status'] === 'success') {
+                    $success_count++;
+                } else {
+                    $error_count++;
+                }
+            }
+            
+            curl_close($ch);
         }
 
-        // Prepare data for API request
-        $data = [
-            'id_dokumen' => $_POST['id_dokumen'],
-            'id_pegawai' => $_POST['id_pegawai'],
-            'nama_dokumen' => $_POST['nama_dokumen'],
-            'status_verifikasi' => $_POST['status_verifikasi']
-        ];
-
-        // Initialize cURL session
-        $ch = curl_init('http://localhost/SIMPEGDLHP/api/dokumen.php');
-        
-        // Set cURL options
-        curl_setopt_array($ch, [
-            CURLOPT_CUSTOMREQUEST => "PUT", // Use PUT method for update
-            CURLOPT_POSTFIELDS => json_encode($data),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen(json_encode($data))
-            ]
-        ]);
-
-        // Execute cURL request
-        $response = curl_exec($ch);
-        
-        // Check for cURL errors
-        if (curl_errno($ch)) {
-            die('Curl error: ' . curl_error($ch));
-        }
-        
-        curl_close($ch);
-
-        // Process API response
-        $result = json_decode($response, true);
-        
-        if ($result['status'] === 'success') {
-            // Redirect to refresh the page
-            header("Location: " . $_SERVER['PHP_SELF'] . "?id_pegawai=" . $_POST['id_pegawai']);
-            exit;
+        // Set message based on results
+        if ($error_count === 0) {
+            $_SESSION['message'] = "Berhasil memperbarui $success_count dokumen.";
+            $_SESSION['message_type'] = 'success';
         } else {
-            echo "Error updating status: " . ($result['message'] ?? 'Unknown error');
+            $_SESSION['message'] = "Berhasil memperbarui $success_count dokumen, gagal memperbarui $error_count dokumen.";
+            $_SESSION['message_type'] = 'warning';
         }
+
+        // Redirect to refresh the page
+        header("Location: " . $_SERVER['PHP_SELF'] . "?id_pegawai=" . $_POST['dokumen'][array_key_first($_POST['dokumen'])]['id_pegawai']);
+        exit;
     }
 }
 

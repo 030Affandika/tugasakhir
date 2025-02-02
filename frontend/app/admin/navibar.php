@@ -44,7 +44,7 @@
             <li><img src="../../img/user_fill.png" alt=""></li>
             <li><img src="../../img/Desk_alt_fill.png" alt=""></li>
             <li><img src="../../img/Folder_check_fill.png" alt=""></li>
-            <li><img src="../../img/Question_fill.png" alt=""></li>
+            <li><img src="../../img/File_dock_search_fill.png" alt=""></li>
         </ul>
 </div>
     </div>
