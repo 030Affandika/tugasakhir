@@ -20,49 +20,33 @@ $search_term = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
     </div>
 
     <!-- Modified filter form -->
-<div class="ml-[150px] mt-12 bg-white rounded-[10px] p-2.5 w-[80%]">
-    <form method="POST" class="filter-form">
-        <div class="">
-            <label>Pilih Jenis Pemberkasan:</label><br>
-            
-            <input type="radio" id="pensiun" name="jenis_pemberkasan" value="Pensiun"
-                <?php echo $jenis_pemberkasan_filter === 'Pensiun' ? 'checked' : ''; ?>>
-            <label for="pensiun">Pensiun</label>
-            
-            <input type="radio" id="kenaikanpangkat" name="jenis_pemberkasan" value="KenaikanPangkat"
-                <?php echo $jenis_pemberkasan_filter === 'KenaikanPangkat' ? 'checked' : ''; ?>>
-            <label for="kenaikanpangkat">Kenaikan Pangkat</label>
-            
-            <input type="radio" id="cuti" name="jenis_pemberkasan" value="Cuti"
-                <?php echo $jenis_pemberkasan_filter === 'Cuti' ? 'checked' : ''; ?>>
-            <label for="cuti">Cuti</label><br>
-
-            <!-- Preserve search term when filtering -->
-            <input type="hidden" name="search" value="<?php echo htmlspecialchars($search_term); ?>">
-            <input type="submit" class="bg-green-600 p-2.5 rounded-[30px] text-white" value="Filter">
-        </div>
-    </form>
+    <div class="flex justify-center mt-12">
+    <div class="bg-white rounded-[10px] p-2.5 w-[80%] flex items-center">
+        <form method="POST" class="flex items-center">
+            <label for="jenis_pemberkasan" class="whitespace-nowrap">Pilih Jenis Pemberkasan:</label>
+            <select name="jenis_pemberkasan" id="jenis_pemberkasan" class="p-2 ml-[10px] border border-gray-300 rounded">
+                <option value="Pensiun" <?php echo $jenis_pemberkasan_filter === 'Pensiun' ? 'selected' : ''; ?>>Pensiun</option>
+                <option value="KenaikanPangkat" <?php echo $jenis_pemberkasan_filter === 'KenaikanPangkat' ? 'selected' : ''; ?>>Kenaikan Pangkat</option>
+                <option value="Cuti" <?php echo $jenis_pemberkasan_filter === 'Cuti' ? 'selected' : ''; ?>>Cuti</option>
+            </select>
+            <button type="submit" class="px-4 py-2 ml-[10px] text-white bg-blue-600 rounded">
+                Filter
+            </button>
+        </form>
+        
+        <form method="POST" class="flex items-center ml-[200px]">
+            <input type="hidden" name="jenis_pemberkasan" value="<?php echo htmlspecialchars($jenis_pemberkasan_filter); ?>">
+            <label for="search" class="whitespace-nowrap">Cari Dokumen:</label>
+            <input type="text" id="search" name="search" value="<?php echo htmlspecialchars($search_term); ?>"
+                   placeholder="Masukkan nama dokumen..." class="p-2 ml-[10px] border rounded-lg">
+            <button type="submit" class="px-4 py-2 ml-[10px] text-white bg-blue-600 rounded">
+                Cari
+            </button>
+        </form>
+    </div>
 </div>
 
-<!-- Modified search form -->
-<div class="ml-[150px] mt-4 bg-white rounded-[10px] p-2.5 w-[80%]">
-    <form method="POST" class="flex items-center gap-2">
-        <!-- Preserve filter selection when searching -->
-        <input type="hidden" name="jenis_pemberkasan" value="<?php echo htmlspecialchars($jenis_pemberkasan_filter); ?>">
-        <div class="flex-1">
-            <label for="search" class="block mb-1">Cari Dokumen:</label>
-            <input type="text" 
-                   id="search" 
-                   name="search" 
-                   value="<?php echo htmlspecialchars($search_term); ?>"
-                   placeholder="Masukkan nama dokumen..." 
-                   class="w-full p-2 border rounded-lg">
-        </div>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg mt-6">
-            Cari
-        </button>
-    </form>
-</div>
+
 <h4 class="mt-[50px] ml-[150px] bg-white rounded-[10px] p-2.5 w-[80%]">Jenis Pemberkasan: <?php echo htmlspecialchars($jenis_pemberkasan_filter); ?></h4>
 <!-- Modified document list display -->
 <div class="ml-[150px] mt-[50px] bg-white w-[80%] rounded-[10px] p-5">
@@ -73,7 +57,7 @@ $search_term = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
             if (empty($search_term) || stripos($dokumen['nama_dokumen'], $search_term) !== false) :
             ?>
             <ul class="flex w-full space-y-4">
-            <li class="w-5 content-center">
+            <li class="content-center w-5">
             <?php 
                 $status = $dokumen['status_verifikasi'];
                 $warna = match ($status) {
@@ -111,7 +95,7 @@ $search_term = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
             <?php endif; ?>
         <?php endforeach; ?>
     <?php else : ?>
-        <div class="alert alert-warning mt-4" role="alert">
+        <div class="mt-4 alert alert-warning" role="alert">
             Tidak ada dokumen untuk jenis pemberkasan: <strong><?php echo htmlspecialchars($jenis_pemberkasan_filter); ?></strong>
             <?php if (!empty($search_term)) : ?>
                 dan pencarian: <strong><?php echo htmlspecialchars($search_term); ?></strong>

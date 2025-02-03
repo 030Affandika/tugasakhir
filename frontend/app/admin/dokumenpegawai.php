@@ -21,65 +21,37 @@ $search_term = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
         <h2>Daftar Dokumen Pegawai</h2>
     </div>
     
-    <!-- Status Messages -->
-    <?php if (isset($message)): ?>
-        <div class="ml-[150px] mt-4 p-2.5 w-[80%] <?php echo $message_type === 'success' ? 'bg-green-200' : 'bg-red-200'; ?> rounded">
-            <?php echo htmlspecialchars($message); ?>
-        </div>
-    <?php endif; ?>
+    
 
-    <h4 class="text-center">ID Pegawai: <?php echo htmlspecialchars($id_pegawai); ?></h4>
+    <!-- <h4 class="text-center">ID Pegawai: <?php echo htmlspecialchars($id_pegawai); ?></h4> -->
 
-    <!-- Batch Notification Button -->
-    <div class="ml-[150px] mb-4 bg-white rounded-[10px] p-2.5 w-[80%]">
-        <form method="POST">
-            <input type="hidden" name="id_pegawai" value="<?php echo htmlspecialchars($id_pegawai); ?>">
-            <input type="hidden" name="jenis_pemberkasan" value="<?php echo htmlspecialchars($jenis_pemberkasan_filter); ?>">
-            <button type="submit" name="send_batch_notification" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-                Kirim Status Verifikasi <?php echo htmlspecialchars($jenis_pemberkasan_filter); ?>
+    
+    <!-- Filter Form -->
+    <div class="flex justify-center mt-12">
+    <div class="bg-white rounded-[10px] p-2.5 w-[80%] flex items-center">
+        <form method="POST" class="flex items-center">
+            <label for="jenis_pemberkasan" class="whitespace-nowrap">Pilih Jenis Pemberkasan:</label>
+            <select name="jenis_pemberkasan" id="jenis_pemberkasan" class="p-2 ml-[10px] border border-gray-300 rounded">
+                <option value="Pensiun" <?php echo $jenis_pemberkasan_filter === 'Pensiun' ? 'selected' : ''; ?>>Pensiun</option>
+                <option value="KenaikanPangkat" <?php echo $jenis_pemberkasan_filter === 'KenaikanPangkat' ? 'selected' : ''; ?>>Kenaikan Pangkat</option>
+                <option value="Cuti" <?php echo $jenis_pemberkasan_filter === 'Cuti' ? 'selected' : ''; ?>>Cuti</option>
+            </select>
+            <button type="submit" class="px-4 py-2 ml-[10px] text-white bg-blue-600 rounded">
+                Filter
             </button>
         </form>
-    </div>
-
-    <!-- Filter Form -->
-    <div class="ml-[150px] mt-12 bg-white rounded-[10px] p-2.5 w-[80%]">
-        <form method="POST">
-            <div>
-                <label>Pilih Jenis Pemberkasan:</label><br>
-                
-                <input type="radio" id="pensiun" name="jenis_pemberkasan" value="Pensiun" <?php echo ($jenis_pemberkasan_filter === "Pensiun") ? "checked" : ""; ?>>
-                <label for="pensiun">Pensiun</label><br>
-                
-                <input type="radio" id="kenaikanpangkat" name="jenis_pemberkasan" value="KenaikanPangkat" <?php echo ($jenis_pemberkasan_filter === "KenaikanPangkat") ? "checked" : ""; ?>>
-                <label for="kenaikanpangkat">Kenaikan Pangkat</label><br>
-                
-                <input type="radio" id="cuti" name="jenis_pemberkasan" value="Cuti" <?php echo ($jenis_pemberkasan_filter === "Cuti") ? "checked" : ""; ?>>
-                <label for="cuti">Cuti</label><br>
-
-                <input type="hidden" name="search" value="<?php echo htmlspecialchars($search_term); ?>">
-                <input type="submit" class="bg-green-600 p-2.5 rounded-[30px] text-white" value="Filter">
-            </div>
-        </form>
-    </div>
-
-    <!-- Search Form -->
-    <div class="ml-[150px] mt-4 bg-white rounded-[10px] p-2.5 w-[80%]">
-        <form method="POST" class="flex items-center gap-2">
+        
+        <form method="POST" class="flex items-center ml-[200px]">
             <input type="hidden" name="jenis_pemberkasan" value="<?php echo htmlspecialchars($jenis_pemberkasan_filter); ?>">
-            <div class="flex-1">
-                <label for="search" class="block mb-1">Cari Dokumen:</label>
-                <input type="text" 
-                       id="search" 
-                       name="search" 
-                       value="<?php echo htmlspecialchars($search_term); ?>"
-                       placeholder="Masukkan nama dokumen..." 
-                       class="w-full p-2 border rounded-lg">
-            </div>
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg mt-6">
+            <label for="search" class="whitespace-nowrap">Cari Dokumen:</label>
+            <input type="text" id="search" name="search" value="<?php echo htmlspecialchars($search_term); ?>"
+                   placeholder="Masukkan nama dokumen..." class="p-2 ml-[10px] border rounded-lg">
+            <button type="submit" class="px-4 py-2 ml-[10px] text-white bg-blue-600 rounded">
                 Cari
             </button>
         </form>
     </div>
+</div>
 
     <h4 class="mt-[50px] ml-[150px] bg-white rounded-[10px] p-2.5 w-[80%]">
         Jenis Pemberkasan: <?php echo htmlspecialchars($jenis_pemberkasan_filter ?: "Semua"); ?>
@@ -98,7 +70,7 @@ $search_term = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
                     if (empty($search_term) || stripos($dokumen['nama_dokumen'], $search_term) !== false):
                     ?>
                     <div class="mb-4">
-                        <ul class="flex w-full items-center">
+                        <ul class="flex items-center w-full">
                             <li class="w-[300px]">
                                 <?php echo htmlspecialchars(str_replace('_', ' ', $dokumen['nama_dokumen'])); ?>
                             </li>
@@ -111,7 +83,7 @@ $search_term = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
                                        value="<?php echo htmlspecialchars($dokumen['nama_dokumen']); ?>">
                                 
                                 <select name="dokumen[<?php echo htmlspecialchars($dokumen['id_dokumen']); ?>][status_verifikasi]" 
-                                        class="border rounded p-1 w-full">
+                                        class="w-full p-1 border rounded">
                                     <option value="Belum_Diverifikasi" <?php echo $dokumen['status_verifikasi'] === 'Belum_Diverifikasi' ? 'selected' : ''; ?>>
                                         Belum Diverifikasi
                                     </option>
@@ -142,13 +114,29 @@ $search_term = isset($_REQUEST['search']) ? $_REQUEST['search'] : '';
                 </div>
             </form>
         <?php else : ?>
-            <div class="alert alert-warning mt-4" role="alert">
+            <div class="mt-4 alert alert-warning" role="alert">
                 Tidak ada dokumen untuk jenis pemberkasan: <strong><?php echo htmlspecialchars($jenis_pemberkasan_filter); ?></strong>
                 <?php if (!empty($search_term)): ?>
                     dan pencarian: <strong><?php echo htmlspecialchars($search_term); ?></strong>
                 <?php endif; ?>
             </div>
-        <?php endif; ?>
-    </div>
+            <?php endif; ?>
+        </div>
+        <!-- Status Messages -->
+    <?php if (isset($message)): ?>
+        <div class="ml-[150px] mt-4 p-2.5 w-[80%] <?php echo $message_type === 'success' ? 'bg-green-200' : 'bg-red-200'; ?> rounded">
+            <?php echo htmlspecialchars($message); ?>
+        </div>
+    <?php endif; ?>
+        <!-- Batch Notification Button -->
+        <div class="ml-[150px] mb-4 bg-white rounded-[10px] p-2.5 w-[80%] mt-10">
+            <form method="POST">
+                <input type="hidden" name="id_pegawai" value="<?php echo htmlspecialchars($id_pegawai); ?>">
+                <input type="hidden" name="jenis_pemberkasan" value="<?php echo htmlspecialchars($jenis_pemberkasan_filter); ?>">
+                <button type="submit" name="send_batch_notification" class="px-4 py-2 font-bold text-white bg-yellow-600 rounded hover:bg-yellow-700">
+                    Kirim Status Verifikasi <?php echo htmlspecialchars($jenis_pemberkasan_filter); ?>
+                </button>
+            </form>
+        </div>
 </body>
 </html>

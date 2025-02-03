@@ -17,14 +17,14 @@ require '../../../backend/fungsi/adminpegawai.php'; // Memastikan fungsi adminpe
     </div>
 
     <!-- Search Form -->
-    <div class="ml-[150px] mt-12 rounded-[10px] p-2.5 w-[80%] bg-white">
+    <div class="ml-[150px] mt-12 rounded-[10px] p-2.5 w-[80%] bg-white flex">
         <form action="" method="GET" class="flex gap-2">
             <input 
                 type="text" 
                 name="search" 
                 placeholder="Cari nama pegawai..." 
                 value="<?= htmlspecialchars($search_query); ?>"
-                class="border border-gray-300 rounded-[5px] px-3 py-1 w-[300px]"
+                class="border border-gray-300 rounded-[5px] px-3 py-1 w-[300px] "
             >
             <button type="submit" class="bg-blue-600 text-white px-4 py-1 rounded-[5px]">Cari</button>
             <?php if (!empty($search_query)): ?>
@@ -35,22 +35,22 @@ require '../../../backend/fungsi/adminpegawai.php'; // Memastikan fungsi adminpe
 
     <div class="p-2.5 ml-[150px] mt-12 bg-white rounded-[10px] overflow-hidden w-[80%]">
         <?php if (empty($pegawai_list)): ?>
-            <p class="text-center py-4">Tidak ada pegawai yang ditemukan.</p>
+            <p class="py-4 text-center">Tidak ada pegawai yang ditemukan.</p>
         <?php else: ?>
             <table class="w-full">
                 <tr class="border-b border-gray-400">
-                    <th class="w-96 text-left font-medium">Nama</th>
-                    <th class="w-36 text-left font-medium">Jabatan</th>
-                    <th class="w-36 text-left font-medium">Pangkat</th>
-                    <th class="w-36 text-left font-medium">Bidang</th>
-                    <th class="w-36 text-left font-medium">Status</th>
-                    <th class="w-52 text-left font-medium">Aksi</th>
+                    <th class="font-medium text-left w-96">Nama</th>
+                    <th class="font-medium text-left w-36">Jabatan</th>
+                    <th class="font-medium text-left w-36">Pangkat</th>
+                    <th class="font-medium text-left w-36">Bidang</th>
+                    <th class="font-medium text-left w-36">Status</th>
+                    <th class="font-medium text-left w-52">Aksi</th>
                 </tr>
                 <?php foreach ($pegawai_list as $pegawai): ?>
                     <tr class="border-b border-gray-400 h-[50px]">
                         <td>
-                            <a class="hover:text-blue-600 flex items-center" href="profilpegawailengkap.php?id_pegawai=<?= $pegawai['id_pegawai']; ?>">
-                                <img class="rounded-full mr-2" src="../../../backend/fungsi/uploads/foto_profil/<?= htmlspecialchars($pegawai['foto_profil']); ?>" alt="Foto Profil" style="width: 40px; height: 40px; object-fit: cover;">
+                            <a class="flex items-center hover:text-blue-600" href="profilpegawailengkap.php?id_pegawai=<?= $pegawai['id_pegawai']; ?>">
+                                <img class="mr-2 rounded-full" src="../../../backend/fungsi/uploads/foto_profil/<?= htmlspecialchars($pegawai['foto_profil']); ?>" alt="Foto Profil" style="width: 40px; height: 40px; object-fit: cover;">
                                 <p><?= htmlspecialchars($pegawai['nama']); ?></p>
                             </a>
                         </td>

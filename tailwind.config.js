@@ -7,9 +7,14 @@ module.exports = {
     './**/*.php'
   ],
   theme: {
-    extend: {},
+    extend: {
+      spacing: {
+        '250': '250px',
+        '300': '300px'
+    },
   },
   plugins: [],
-};
+}
+}
 
 
