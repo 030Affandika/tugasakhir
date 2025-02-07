@@ -15,7 +15,7 @@ require '../../../backend/fungsi/dokumen.php';
     <h1>Upload Dokumen Kenaikan Pangkat</h1>
     </div>
     <div class="bg-white rounded-[10px] p-5 ml-[150px] w-[85%] mt-[100px]">
-    <form action="http://localhost/SIMPEGDLHP/backend/fungsi/dokumen.php" method="POST" enctype="multipart/form-data">
+    <form action="/SIMPEGDLHP/backend/fungsi/dokumen.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id_pegawai" value="<?php echo $id_pegawai; ?>">
         <input type="hidden" name="jenis_pemberkasan" value="KenaikanPangkat">
 

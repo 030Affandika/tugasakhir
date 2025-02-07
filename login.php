@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="./frontend/css/output.css">
 </head>
 <body class="background-login">
-    <div class="flex justify-center items-center ">
+    <div class="flex items-center justify-center ">
     <div class="w-[400px] h-[500px] bg-white bg-transparent rounded-[10px] p-5 mt-[100px]">
-    <div class="text-xl flex justify-center mt-10 font-semibold">
+    <div class="flex justify-center mt-10 text-xl font-semibold">
     <h2>Login</h2><br><br>
     </div>
 
@@ -20,7 +20,7 @@
 <?php } ?>
 
 <div class="text-center mt-[50px]">
-<form method="POST" action="http://localhost/SIMPEGDLHP/backend/fungsi/login.php">
+<form method="POST" action="/SIMPEGDLHP/backend/fungsi/login.php">
     <label for="username">Username:</label><br>
     <input type="text" id="username" name="username" required class="bg-slate-300 w-[300px] h-[30px] rounded-[30px] pl-2.5"><br><br>
 

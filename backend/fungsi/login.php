@@ -30,7 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Tangani error cURL
     if (curl_errno($ch)) {
         $error_message = 'Error: ' . curl_error($ch);
-        header("Location: ../frontend/login.php?error=" . urlencode($error_message));
+        echo "<script>
+                alert('" . addslashes($error_message) . "');
+                window.location.href = '../frontend/login.php';
+              </script>";
         exit;
     }
     curl_close($ch);
@@ -41,7 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Cek validitas respons
     if (!$response_data || json_last_error() !== JSON_ERROR_NONE) {
         $error_message = 'Error decoding JSON: ' . json_last_error_msg();
-        header("Location: ../frontend/login.php?error=" . urlencode($error_message));
+        echo "<script>
+                alert('" . addslashes($error_message) . "');
+                window.location.href = '../../login.php';
+              </script>";
         exit;
     }
 
@@ -61,7 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     } else {
         $error_message = isset($response_data['message']) ? $response_data['message'] : 'Terjadi kesalahan.';
-        header("Location: ../frontend/login.php?error=" . urlencode($error_message));
+        echo "<script>
+                alert('" . addslashes($error_message) . "');
+                window.location.href = '../../login.php';
+              </script>";
         exit;
     }
 }

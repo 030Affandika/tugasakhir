@@ -20,7 +20,7 @@ require '../../../backend/fungsi/dokumen.php';
         <p>Silahkan unduh form pengajuan cuti disini</p>
         <a href="../../../backend/fungsi/downloadformcuti.php?file_name=form_cuti.pdf" class="btn btn-link">Download Form Cuti</a>
     </div><br><br>
-    <form action="http://localhost/SIMPEGDLHP/backend/fungsi/dokumen.php" method="POST" enctype="multipart/form-data">
+    <form action="/SIMPEGDLHP/backend/fungsi/dokumen.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="id_pegawai" value="<?php echo $id_pegawai; ?>">
         <input type="hidden" name="jenis_pemberkasan" value="Cuti">
         <!-- <input type="hidden" name="status_verifikasi" value="Belum Diverifikasi"> -->
