@@ -1,6 +1,6 @@
 <?php
-session_start();
-
+// session_start();
+require '../../../backend/fungsi/adminpegawai.php';
 // Redirect jika bukan admin
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
     header("Location: index.php");
@@ -25,6 +25,10 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'admin') {
     </div>
     <div class="bg-white ml-[150px] mt-[50px] text-xl p-2.5 rounded-[10px] w-[85%]">
     <h2>Haii, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h2>
+    </div>
+    <div class="bg-white ml-[150px] mt-[50px] text-xl p-2.5 rounded-[10px] w-[85%]">
+    <h3 class="mb-2 text-lg font-semibold">Jumlah Pegawai</h3>
+    <h2><?php echo $total_pegawai; ?></h2>
     </div>
 </body>
 </html>

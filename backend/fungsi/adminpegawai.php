@@ -27,13 +27,15 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 
 $pegawai_list = $data['data'];
 
+// Hitung jumlah total pegawai
+$total_pegawai = count($pegawai_list);
+
 // If search is active, filter results
 if (!empty($search_query)) {
     $pegawai_list = array_filter($pegawai_list, function($pegawai) use ($search_query) {
         return stripos($pegawai['nama'], $search_query) !== false;
     });
 }
-
 
 // fungsi tambah pegawai
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_pegawai'])) {
@@ -93,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tambah_pegawai'])) {
     $ch = curl_init($url);
 
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data)); // Kirim data pegawai termasuk foto profil
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
@@ -138,7 +140,7 @@ if (isset($_GET['id_pegawai']) && is_numeric($_GET['id_pegawai'])) {
     // Menangani form update pegawai
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_pegawai'])) {
         $data = [
-            'id_pegawai' => $id_pegawai, // Menambahkan ID pegawai untuk update
+            'id_pegawai' => $id_pegawai,
             'nama' => $_POST['nama'],
             'username' => $_POST['username'],
             'password' => $_POST['password'],
@@ -225,20 +227,20 @@ if (isset($_GET['id_pegawai']) && is_numeric($_GET['id_pegawai'])) {
     }    
 }
 
-   // Menangani request hapus pegawai
-   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['hapus_pegawai'])) {
+// Menangani request hapus pegawai
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['hapus_pegawai'])) {
     // Mendapatkan ID pegawai yang akan dihapus
     $id_pegawai = $_POST['id_pegawai'];
 
-    // Proses penghapusan pegawai berdasarkan ID, misalnya dengan API atau query database
-    $url = "http://localhost/SIMPEGDLHP/api/pegawai.php"; // Ganti dengan URL API Anda
+    // Proses penghapusan pegawai berdasarkan ID
+    $url = "http://localhost/SIMPEGDLHP/api/pegawai.php";
     $data = [
         'id_pegawai' => $id_pegawai
     ];
 
     // Menggunakan cURL untuk menghapus data
     $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE"); // Menggunakan metode DELETE
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -257,4 +259,10 @@ if (isset($_GET['id_pegawai']) && is_numeric($_GET['id_pegawai'])) {
     }
     header("Location: listprofilpegawai.php"); 
 }
+
+// Return data untuk digunakan di view
+return [
+    'total_pegawai' => $total_pegawai,
+    'pegawai_list' => $pegawai_list
+];
 ?>
